@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>今天是个好日子</h1>
+    <div id="app"></div>
+    <script src="http://a.msstatic.com/huya/hd/cdn_libs/jquery_mod.js"></script>
+    <script>
+        var jsonp = function (opts) {
+            var script = document.createElement('script');
+            script.src = `${opts.url}/jsonp?callback=${opts.fn}`;
+            script.async = true;
+            window[opts.fn] = function(data) {
+                opts.callback(data);
+            }
+            document.head.appendChild(script);
+            script.onload = () => {
+                script.remove();
+            }
+        }
+
+        jsonp({
+            url: 'http://127.0.0.1:9001',
+            fn: 'test',
+            callback: function(data) {
+                var tpl = `<h1>年龄${data.age}</h1>
+                       <h1>姓名${data.name}</h1>`
+                var App = document.getElementById('app');
+                App.innerHTML = tpl;
+            }
+        })
+        
+        $.ajax({
+            url: 'http://127.0.0.1:9001/api?m=getUserInfo',
+            data: {
+                name: 1
+            },
+            success: function(res) {
+                console.log(123, res);
+            }
+        })
+
+    </script>
+    <!-- <script src="http://127.0.0.1:9001/jsonp?callback=test"></script> -->
+</body>
+</html>
